@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsqp0r01gwctj"
-path="res://.godot/imported/Dungeon_Minecart.png-fa23f774382b596059aa0f6858fa23a0.ctex"
+uid="uid://b6gesf1ea1bm1"
+path="res://.godot/imported/Potion 3.png-a131c74d5db4be7586f43ae5d8d2740f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Animations/Dungeon_Minecart.png"
-dest_files=["res://.godot/imported/Dungeon_Minecart.png-fa23f774382b596059aa0f6858fa23a0.ctex"]
+source_file="res://assets/art/Potion 3.png"
+dest_files=["res://.godot/imported/Potion 3.png-a131c74d5db4be7586f43ae5d8d2740f.ctex"]
 
 [params]
 

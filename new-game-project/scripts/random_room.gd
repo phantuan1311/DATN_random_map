@@ -13,7 +13,8 @@ extends Area2D
 	set(value):
 		if Engine.is_editor_hint():
 			_ready()
-			
+
+@onready var decor_layer: TileMapLayer = $DecorLayer
 @onready var floor_layer: TileMapLayer = $FloorLayer
 @onready var wall_layer: TileMapLayer = $WallLayer
 @onready var collision_polygon_2d: CollisionPolygon2D = $CollisionPolygon2D
@@ -24,8 +25,10 @@ var directions = {
 	"left": Vector2i(-1,0),
 	"top": Vector2i(0,-1),
 }
+
 var floorTiles = {
-	"default": Vector2(1,2),
+	"default": Vector2(0,3),
+	"decor_choices": [Vector2(12,14), Vector2(13,14), Vector2(10,15)]
 }
 var wallTiles = {
 	"left": Vector2(2,5),
@@ -35,9 +38,12 @@ var wallTiles = {
 	"topRightCorner": Vector2(1,7),
 	"bottomLeftCorner": Vector2(0,8),
 	"bottomRightCorner": Vector2(1,8),
-	"top": Vector2(1,15),
-	"top2": Vector2(1,14),
-	"top3": Vector2(1,13),
+
+	# các top có nhiều lựa chọn
+	"top_choices": [Vector2(1,15), Vector2(3,15), Vector2(4,15)],
+	"top2_choices": [Vector2(1,14), Vector2(3,14), Vector2(4,14)],
+	"top3_choices": [Vector2(1,13), Vector2(3,13), Vector2(4,13)],
+
 	"top4": Vector2(1,6),
 	"topLeftCornerReverse": Vector2(2,6),
 	"topRightCornerReverse": Vector2(0,6),
@@ -45,11 +51,14 @@ var wallTiles = {
 	"bottomRightCornerReverse": Vector2(0,4),
 }
 
+
 func _ready() -> void:
 	floor_layer.clear()
 	wall_layer.clear()
-
+	decor_layer.clear()  
+	
 	_create_room()
+
 
 func _create_room():
 	var floorCount = randi_range(1, maxOverlapFloors)
@@ -62,7 +71,14 @@ func _create_room():
 	_fill_gaps()
 	_create_walls()
 	_create_collision_shape()
-		
+
+func get_random_tile(choices: Array, default_tile: Vector2, chance: float = 0.1) -> Vector2:
+	# chance là % cơ hội đổi sang tile trang trí (0.2 là 20%)
+	if randf() < chance:
+		return choices.pick_random()
+	return default_tile
+
+
 func _create_floor_rect():
 	var startPointRange = 5
 	var starPoint = Vector2(
@@ -77,7 +93,16 @@ func _draw_floor(floors):
 	for floor:Rect2 in floors:
 		for x in floor.size.x:
 			for y in floor.size.y:
-				floor_layer.set_cell(Vector2(floor.position.x + x , floor.position.y + y), 0, floorTiles["default"])
+				var pos = Vector2(floor.position.x + x , floor.position.y + y)
+
+				# luôn vẽ tile default
+				floor_layer.set_cell(pos, 0, floorTiles["default"])
+
+				# random spawn decor (5% chẳng hạn)
+				if randf() < 0.01:
+					var decor = floorTiles["decor_choices"].pick_random()
+					decor_layer.set_cell(pos, 0, decor)
+
 
 func _fill_gaps():
 	var changeList = []
@@ -214,7 +239,7 @@ func _create_bottom_wall(position):
 	else:
 		wall_layer.set_cell(position + directions["bottom"], 0, wallTiles["bottom"])
 
-func _create_right_wall(position):	
+func _create_right_wall(position):
 	if _has_floor(position + directions["right"] + directions["bottom"] * 4): return
 	
 	elif _has_floor(position + directions["right"] + directions["top"]):
@@ -223,16 +248,22 @@ func _create_right_wall(position):
 		wall_layer.set_cell(position + directions["right"], 0, wallTiles["right"])
 
 func _create_top_wall(position):
-	wall_layer.set_cell(position +  directions["top"], 0, wallTiles["top"])
-	wall_layer.set_cell(position + directions["top"] * 2, 0, wallTiles["top2"])
-	wall_layer.set_cell(position + directions["top"] * 3, 0, wallTiles["top3"])
+	var top_tile = get_random_tile(wallTiles["top_choices"], Vector2(1,15), 0.3)
+	var top2_tile = get_random_tile(wallTiles["top2_choices"], Vector2(1,14), 0.3)
+	var top3_tile = get_random_tile(wallTiles["top3_choices"], Vector2(1,13), 0.3)
 	
-	if _has_floor(position +  directions["top"] + directions["left"]):
-		wall_layer.set_cell(position +  directions["top"] * 4, 0, wallTiles["topRightCornerReverse"])
-	elif _has_floor(position +  directions["top"] + directions["right"]):
-		wall_layer.set_cell(position +  directions["top"] * 4, 0, wallTiles["topLeftCornerReverse"])
+	wall_layer.set_cell(position + directions["top"], 0, top_tile)
+	wall_layer.set_cell(position + directions["top"] * 2, 0, top2_tile)
+	wall_layer.set_cell(position + directions["top"] * 3, 0, top3_tile)
+	
+	if _has_floor(position + directions["top"] + directions["left"]):
+		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["topRightCornerReverse"])
+	elif _has_floor(position + directions["top"] + directions["right"]):
+		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["topLeftCornerReverse"])
 	else:
-		wall_layer.set_cell(position +  directions["top"] * 4, 0, wallTiles["top4"])
+		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["top4"])
+
+
 
 func _create_collision_shape():
 	var collisionPoints = []
