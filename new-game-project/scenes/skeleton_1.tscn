@@ -314,6 +314,7 @@ radius = 12.0416
 radius = 92.0054
 
 [node name="skeleton1" type="CharacterBody2D" groups=["monster"]]
+position = Vector2(2, -3)
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_pafo3")
 
@@ -342,6 +343,7 @@ shape = SubResource("CircleShape2D_r3kmy")
 [node name="detect_area" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="detect_area"]
+position = Vector2(-3.33333, 5)
 shape = SubResource("CircleShape2D_cekdy")
 
 [connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]

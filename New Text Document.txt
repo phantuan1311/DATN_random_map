@@ -1,0 +1,19 @@
+var floorTiles = {
+	"default": Vector2(8,13),
+
+
+var wallTiles = { 
+	"left": Vector2(7,8), 
+	"right": Vector2(5,8), 
+	"bottom": Vector2(6,7), 
+	"top": Vector2(6,9), 
+	"topLeftCorner": Vector2(15,8), 
+	"topRightCorner": Vector2(12,9), 
+	"bottomLeftCorner": Vector2(10,8), 
+	"bottomRightCorner": Vector2(9,8), 
+	"topLeftCornerReverse": Vector2(2,6),# 
+	"topRightCornerReverse": Vector2(0,6),# 
+	"bottomLeftCornerReverse": Vector2(7,7), 
+	"bottomRightCornerReverse": Vector2(12,7), }
+
+

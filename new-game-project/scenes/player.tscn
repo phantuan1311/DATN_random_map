@@ -525,6 +525,5 @@ position = Vector2(6.38621e-07, -0.785715)
 shape = SubResource("RectangleShape2D_ieco8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3.6, 3.6)
 
 [node name="Marker2D" type="Marker2D" parent="."]
