@@ -4,14 +4,20 @@ extends Node2D
 
 @onready var rooms: Node2D = $rooms
 @onready var player_scene = preload("res://scenes/hero.tscn")
-@onready var slime1_scene = preload("res://scenes/skeleton_1.tscn")
+@onready var slime1_scene = preload("res://scenes/slime_1.tscn")
+@onready var skeleton1_scene = preload("res://scenes/skeleton_1.tscn")
 @onready var door = preload("res://scenes/door.tscn")
 
 const RANDOM_ROOM = preload("res://scenes/random_room.tscn")
 var door_cell : Vector2i
+var last_valid_room: Node2D = null
 
 func _ready() -> void:
 	await _create_dungeon()
+	
+	if last_valid_room:
+		_spawn_door_in_room(last_valid_room)
+
 	spawn_player()
 	spawn_slime1()
 	
@@ -31,8 +37,8 @@ func _create_room():
 	
 	var isFirstRoom = existingRooms.is_empty()
 	if isFirstRoom:
-		# Tạo cửa cho phòng đầu tiên
-		_spawn_door_in_room(newRoom)
+		last_valid_room = newRoom
+		spawn_skeletons_in_room(newRoom)
 		return
 	
 	var possibleRooms = []
@@ -43,7 +49,7 @@ func _create_room():
 	var selectedRoom = possibleRooms.pick_random()
 	var success = await newRoom.connect_with(selectedRoom)
 	
-	var tries = 10
+	var tries = 8
 	while not success and tries > 0:
 		selectedRoom = possibleRooms.pick_random()
 		success = await newRoom.connect_with(selectedRoom)
@@ -51,6 +57,26 @@ func _create_room():
 
 	if not success:
 		newRoom.queue_free()
+	else:
+		last_valid_room = newRoom
+		spawn_skeletons_in_room(newRoom)
+
+func spawn_skeletons_in_room(room: Node2D):
+	if not room.has_node("FloorLayer"):
+		return
+	var floor_layer: TileMapLayer = room.get_node("FloorLayer")
+	var floor_cells = floor_layer.get_used_cells()
+	if floor_cells.is_empty():
+		return
+
+	var skeleton_count = randi_range(2, 4)
+	for i in skeleton_count:
+		var skeleton = skeleton1_scene.instantiate()
+		add_child(skeleton)
+
+		var random_cell = floor_cells.pick_random()
+		var spawn_pos = floor_layer.map_to_local(random_cell)
+		skeleton.global_position = floor_layer.to_global(spawn_pos)
 
 
 func _spawn_door_in_room(room: Node2D):
@@ -96,7 +122,7 @@ func _spawn_door_in_room(room: Node2D):
 	# Lọc các đoạn đủ dài để đặt cửa
 	var valid_segments: Array = []
 	for seg in segments:
-		if seg.size() >= 3: # ít nhất 3 tile để có "giữa"
+		if seg.size() >= 3:
 			valid_segments.append(seg)
 
 	if valid_segments.is_empty():
@@ -129,26 +155,26 @@ func spawn_player():
 	var player = player_scene.instantiate()
 	add_child(player)
 
-	var existingRooms = rooms.get_children()
-	if existingRooms.is_empty():
+	var existing_rooms = rooms.get_children()
+	if existing_rooms.is_empty():
 		return
-	
-	var first_room = existingRooms[0]
+
+	# Lấy phòng đầu tiên
+	var first_room = existing_rooms[0]
 	var floor_layer: TileMapLayer = first_room.get_node("FloorLayer")
 
-	if door_cell != Vector2i(): # đã có cửa
-		var spawn_pos = floor_layer.map_to_local(door_cell)
-		player.global_position = floor_layer.to_global(spawn_pos)
-	else:
-		# fallback: spawn ở giữa phòng
-		var floor_cells = floor_layer.get_used_cells()
-		if floor_cells.is_empty():
-			player.global_position = first_room.position
-			return
+	# Spawn ở giữa phòng đầu tiên
+	var floor_cells = floor_layer.get_used_cells()
+	if floor_cells.is_empty():
+		# Nếu map chưa có ô nào, đặt ở chính giữa phòng
+		player.global_position = first_room.global_position
+		return
 
-		var center_cell = floor_cells[floor_cells.size() / 2]
-		var spawn_position = floor_layer.map_to_local(center_cell)
-		player.global_position = floor_layer.to_global(spawn_position)
+	var center_index = floor_cells.size() / 2
+	var center_cell = floor_cells[center_index]
+	var spawn_position = floor_layer.map_to_local(center_cell)
+	player.global_position = floor_layer.to_global(spawn_position)
+
 
 
 func spawn_slime1():

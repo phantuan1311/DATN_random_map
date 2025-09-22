@@ -65,8 +65,7 @@ func _physics_process(delta):
 
 		if attack_timer <= 0:
 			if player.has_method("take_damage"):
-				await get_tree().create_timer(0.7).timeout
-				player.take_damage(damage)
+				player.take_damage(1)
 			attack_timer = attack_cooldown
 		move_and_slide()
 		return
@@ -175,7 +174,6 @@ func _on_hitbox_area_entered(area):
 func take_damage(damage: int):
 	if dead:
 		return
-
 	health -= damage
 	stun(stun_duration) 
 
@@ -197,12 +195,11 @@ func death():
 	$attack_area/CollisionShape2D.set_deferred("disabled", true)
 
 	# spawn coin ngẫu nhiên từ 0 đến 3
-	var rng = randi_range(0, 3)
+	var rng = randi_range(0, 5)
 	for i in rng:
 		var coin = coin_scene.instantiate()
 		var offset = Vector2(randf_range(-10, 10), randf_range(-10, 10))
 		coin.global_position = global_position + offset
 		get_parent().add_child(coin)
-
 	await get_tree().create_timer(0.9).timeout
 	queue_free()

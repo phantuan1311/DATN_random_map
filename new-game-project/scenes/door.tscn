@@ -140,7 +140,7 @@ size = Vector2(26, 26)
 size = Vector2(26, 22)
 
 [node name="door" type="Area2D"]
-position = Vector2(-14, -18)
+position = Vector2(0, -7)
 script = ExtResource("1_yvmca")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

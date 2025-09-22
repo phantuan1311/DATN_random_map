@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuok7akxbseg4"]
+
+[ext_resource type="PackedScene" uid="uid://ctvft2tjudesm" path="res://scenes/golem_boss.tscn" id="1_q03u6"]
+[ext_resource type="PackedScene" uid="uid://dc3vsclw6xuye" path="res://scenes/random_room.tscn" id="1_so0ka"]
+[ext_resource type="PackedScene" uid="uid://b5clxft5ov06h" path="res://scenes/hero.tscn" id="2_lach4"]
+
+[node name="BossRoom" type="Node2D"]
+
+[node name="RandomRoom" parent="." instance=ExtResource("1_so0ka")]
+minFloorWidth = 15
+minFloorHeight = 15
+maxFloorWidth = 20
+maxFloorHeight = 20
+
+[node name="GolemBoss" parent="." instance=ExtResource("1_q03u6")]
+position = Vector2(121, 131)
+
+[node name="player" parent="." instance=ExtResource("2_lach4")]
+position = Vector2(230, 222)

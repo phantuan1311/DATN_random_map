@@ -3,6 +3,7 @@ extends CharacterBody2D
 var speed = 80
 var health: int = 3
 var dead: bool = false
+var hearts_list : Array[TextureRect]
 
 var is_shooting = false
 var is_reloading = false
@@ -15,6 +16,10 @@ var ammo: int = MAG_SIZE
 @onready var anim = $AnimatedSprite2D
 @onready var marker = $Marker2D
 
+func _ready() -> void:
+	var hearts_parent = $health_bar/HBoxContainer
+	for child in hearts_parent.get_children():
+		hearts_list.append(child)
 
 func _physics_process(delta):
 	if dead:
@@ -106,10 +111,15 @@ func take_damage(amount: int = 1):
 		return
 
 	health -= amount
+	update_heart_display()
 	if health > 0:
 		start_invincible()
 	else:
 		death()
+
+func update_heart_display():
+	for i in range(hearts_list.size()):
+		hearts_list[i].visible = i < health
 
 func start_invincible():
 	is_invincible = true

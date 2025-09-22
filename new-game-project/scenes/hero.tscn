@@ -1,7 +1,8 @@
-[gd_scene load_steps=28 format=3 uid="uid://b5clxft5ov06h"]
+[gd_scene load_steps=29 format=3 uid="uid://b5clxft5ov06h"]
 
 [ext_resource type="Texture2D" uid="uid://dj5qiya0ycl0h" path="res://assets/characters/players blue x1.png" id="1_ic5ig"]
 [ext_resource type="Script" path="res://scripts/hero.gd" id="1_mfmgu"]
+[ext_resource type="Texture2D" uid="uid://dt4hwjmra4frt" path="res://assets/art/Heart.png" id="3_hnevq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ons1g"]
 atlas = ExtResource("1_ic5ig")
@@ -213,3 +214,38 @@ position = Vector2(0, 8.33333)
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 4)
 zoom = Vector2(5, 5)
+
+[node name="health_bar" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="health_bar"]
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 124.0
+offset_bottom = 50.0
+
+[node name="heart" type="TextureRect" parent="health_bar/HBoxContainer"]
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="health_bar/HBoxContainer/heart"]
+position = Vector2(19, 18)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("3_hnevq")
+
+[node name="heart2" type="TextureRect" parent="health_bar/HBoxContainer"]
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="health_bar/HBoxContainer/heart2"]
+position = Vector2(19, 18)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("3_hnevq")
+
+[node name="heart3" type="TextureRect" parent="health_bar/HBoxContainer"]
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="health_bar/HBoxContainer/heart3"]
+position = Vector2(19, 18)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("3_hnevq")
