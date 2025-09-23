@@ -311,7 +311,7 @@ size = Vector2(13, 15)
 radius = 12.0416
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cekdy"]
-radius = 92.0054
+radius = 80.0
 
 [node name="skeleton1" type="CharacterBody2D" groups=["monster"]]
 position = Vector2(2, -3)

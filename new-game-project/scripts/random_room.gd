@@ -1,5 +1,4 @@
-@tool
-extends Area2D
+@tool extends Area2D
 
 @export var minFloorWidth = 6
 @export var minFloorHeight = 6

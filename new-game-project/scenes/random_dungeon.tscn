@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://db1j0l3bn2fak"]
+[gd_scene load_steps=3 format=3 uid="uid://db1j0l3bn2fak"]
 
 [ext_resource type="Script" path="res://scripts/random_dungeon.gd" id="1_55fmr"]
+[ext_resource type="PackedScene" uid="uid://dtfwjrfnfvwfb" path="res://scenes/pause_menu.tscn" id="2_qxiuh"]
 
-[node name="RandomDungeon" type="Node2D"]
+[node name="RandomDungeon" type="Node2D" groups=["Dungeon"]]
 script = ExtResource("1_55fmr")
 
 [node name="rooms" type="Node2D" parent="."]
@@ -10,12 +11,5 @@ script = ExtResource("1_55fmr")
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
-[node name="Button" type="Button" parent="CanvasLayer"]
-offset_right = 8.0
-offset_bottom = 8.0
-theme_override_font_sizes/font_size = 20
-text = "Refresh"
-
-[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("2_qxiuh")]

@@ -195,11 +195,11 @@ func death():
 	$attack_area/CollisionShape2D.set_deferred("disabled", true)
 
 	# spawn coin ngẫu nhiên từ 0 đến 3
-	var rng = randi_range(0, 5)
+	var rng = randi_range(0, 4)
 	for i in rng:
 		var coin = coin_scene.instantiate()
 		var offset = Vector2(randf_range(-10, 10), randf_range(-10, 10))
 		coin.global_position = global_position + offset
 		get_parent().add_child(coin)
-	await get_tree().create_timer(0.9).timeout
+	await get_tree().create_timer(1).timeout
 	queue_free()

@@ -429,6 +429,7 @@ position = Vector2(3, -17)
 position = Vector2(98, 17)
 texture = ExtResource("2_ypyp7")
 vframes = 15
+frame = 14
 
 [node name="Area2D" type="Area2D" parent="Pivot"]
 
@@ -479,6 +480,7 @@ theme_override_font_sizes/font_size = 55
 text = "Boss đã bị hạ gục!"
 
 [node name="debug" type="Label" parent="."]
+visible = false
 offset_left = -26.0
 offset_top = -55.0
 offset_right = 23.0

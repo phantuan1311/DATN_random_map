@@ -202,7 +202,9 @@ script = ExtResource("1_mfmgu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_legp1")
-animation = &"idle"
+animation = &"death"
+frame = 8
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)
@@ -213,7 +215,7 @@ position = Vector2(0, 8.33333)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 4)
-zoom = Vector2(5, 5)
+zoom = Vector2(0.5, 0.5)
 
 [node name="health_bar" type="CanvasLayer" parent="."]
 
