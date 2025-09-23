@@ -215,7 +215,7 @@ position = Vector2(0, 8.33333)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 4)
-zoom = Vector2(0.5, 0.5)
+zoom = Vector2(5, 5)
 
 [node name="health_bar" type="CanvasLayer" parent="."]
 

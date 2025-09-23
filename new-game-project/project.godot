@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="New Game Project"
+config/name="DATN_21011127_PhanHuuTuan"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://global.gd"
+
+[display]
+
+window/stretch/mode="viewport"
 
 [global_group]
 

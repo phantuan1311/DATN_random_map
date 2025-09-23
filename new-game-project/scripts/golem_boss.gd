@@ -18,10 +18,10 @@ var health = 100:
 			progress_bar.visible = false
 			find_child("FiniteStateMachine").change_state("Death")
 		elif value <= progress_bar.max_value / 2 and DEF == 0:
-			DEF = 3
+			DEF = 1
 			find_child("FiniteStateMachine").change_state("ArmorBuff")
 		elif value <= progress_bar.max_value / 4 and DEF == 3:
-			DEF = 4
+			DEF = 2
 			find_child("FiniteStateMachine").change_state("ArmorBuff")
 
 func _ready():
@@ -40,7 +40,7 @@ func _physics_process(delta):
 	move_and_collide(velocity * delta)
 
 func take_damage():
-		health -= 5 - DEF
+		health -= 4 - DEF
 
 func _on_area_2d_body_entered(body):
 	if body.is_in_group("player") and body.has_method("take_damage"):
