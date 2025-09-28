@@ -1,6 +1,7 @@
 extends Node2D
 
-@export var maxRoomCount = 30
+@export var minRoomCount: int = 5
+@export var maxRoomCount: int = 10
 
 @onready var rooms: Node2D = $rooms
 @onready var player_scene = preload("res://scenes/hero.tscn")
@@ -12,71 +13,110 @@ const RANDOM_ROOM = preload("res://scenes/random_room.tscn")
 
 var door_cell: Vector2i
 var last_valid_room: Node2D = null
-
 var dungeon_seed: int = 0
 
+
 func _ready() -> void:
-	# Nếu load game thì Global.load_game(self) sẽ tự dựng dungeon + player
 	if Global.has_save and Global.load_requested:
-		if Global.load_game(self):
-			print("Loaded saved dungeon")
-			return
-	
-	# Nếu không load → tạo dungeon mới
+		Global.load_requested = false
+		call_deferred("_do_load_game")
+		return
+
 	dungeon_seed = randi()
 	seed(dungeon_seed)
-	await _create_dungeon()
+	await _create_dungeon_with_min_loading(3.0)
+
 	if last_valid_room:
 		_spawn_door_in_room(last_valid_room)
 	spawn_player()
 	spawn_slime1()
 
 
+func _do_load_game() -> void:
+	var ok = await Global.load_game()
+	if not ok:
+		print("❌ Load failed → tạo dungeon mới")
+		dungeon_seed = randi()
+		seed(dungeon_seed)
+		await _create_dungeon_with_min_loading(3.0)
+
+		if last_valid_room:
+			_spawn_door_in_room(last_valid_room)
+		spawn_player()
+		spawn_slime1()
+	# nếu ok == true thì Global.load_game() sẽ tự gọi load_from_data()
+	# nên không cần tự tái tạo dungeon ở đây
+
+
 func get_save_data(player: Node2D) -> Dictionary:
 	return {
 		"seed": dungeon_seed,
-		"player_position": player.global_position,
+		"player_position": player.global_position
 	}
 
 
 func load_from_data(data: Dictionary) -> void:
-	# Reset lại dungeon
+	# Reset dungeon cũ
 	for c in rooms.get_children():
-		c.queue_free()
+		if is_instance_valid(c):
+			c.queue_free()
 
-	# Tái tạo từ seed
+	# Tái tạo dungeon từ seed
 	if data.has("seed"):
 		dungeon_seed = data["seed"]
 		seed(dungeon_seed)
-		await _create_dungeon()
+		await _create_dungeon_with_min_loading(3.0)
+
 		if last_valid_room:
 			_spawn_door_in_room(last_valid_room)
 
 	# Respawn player
 	var player := player_scene.instantiate()
 	add_child(player)
-	player.add_to_group("Player")
-
+	player.add_to_group("player")
 	if data.has("player_position"):
 		player.global_position = data["player_position"]
 
-	# Spawn slime/quái lại (nếu bạn muốn giữ nguyên trạng thái quái, phải lưu thêm)
-	spawn_slime1()
+	if data.has("player_position"):
+		player.global_position = data["player_position"]
+	else:
+		# fallback: spawn player ở phòng đầu
+		var existing_rooms = rooms.get_children()
+		if existing_rooms.size() > 0 and existing_rooms[0].has_node("FloorLayer"):
+			var floor_layer: TileMapLayer = existing_rooms[0].get_node("FloorLayer")
+			var floor_cells = floor_layer.get_used_cells()
+			if not floor_cells.is_empty():
+				var center_cell = floor_cells[floor_cells.size() / 2]
+				var spawn_position = floor_layer.map_to_local(center_cell)
+				player.global_position = floor_layer.to_global(spawn_position)
 
+	# Spawn enemy
+	spawn_slime1()
+	spawn_skeletons_in_room(last_valid_room)
+
+# Hàm helper: tạo dungeon + loading tối thiểu N giây
+func _create_dungeon_with_min_loading(min_time: float = 3.0) -> void:
+	$CanvasLayer/loading.visible = true
+	var timer = get_tree().create_timer(min_time).timeout
+	await _create_dungeon()
+	await timer
+	$CanvasLayer/loading.visible = false
 
 
 # -------------------- DUNGEON GENERATION --------------------
 
 func _create_dungeon() -> void:
-	var roomCount := randi_range(8, maxRoomCount)
-	for i in roomCount: 
+	var roomCount := randi_range(minRoomCount, maxRoomCount)
+	for i in range(roomCount):
 		await _create_room()
 
-func _create_room():
+
+func _create_room() -> void:
 	var existingRooms = rooms.get_children()
 	var newRoom = RANDOM_ROOM.instantiate()
 	rooms.add_child(newRoom)
-	newRoom.owner = get_tree().edited_scene_root
+	# owner đặt để scene tree editor không bị lẫn khi running trong editor — không bắt buộc khi export
+	# newRoom.owner = get_tree().edited_scene_root
 
 	var isFirstRoom = existingRooms.is_empty()
 	if isFirstRoom:
@@ -84,7 +124,7 @@ func _create_room():
 		return
 	
 	# lọc các phòng còn sống
-	var possibleRooms = []
+	var possibleRooms: Array = []
 	for room in existingRooms:
 		if room == newRoom:
 			continue
@@ -95,13 +135,15 @@ func _create_room():
 		newRoom.queue_free()
 		return
 	
-	var success = false
-	var tries = 8
+	var success: bool = false
+	var tries: int = 8
 	while tries > 0 and not success:
 		var selectedRoom = possibleRooms.pick_random()
+		# đảm bảo valid trước khi connect
 		if not is_instance_valid(selectedRoom):
 			tries -= 1
 			continue
+		# connect_with được implement trong random_room (cần await nếu là coroutine)
 		success = await newRoom.connect_with(selectedRoom)
 		tries -= 1
 
@@ -112,17 +154,16 @@ func _create_room():
 		spawn_skeletons_in_room(newRoom)
 
 
-
-func spawn_skeletons_in_room(room: Node2D):
-	if not room.has_node("FloorLayer"):
+func spawn_skeletons_in_room(room: Node2D) -> void:
+	if not room or not room.has_node("FloorLayer"):
 		return
 	var floor_layer: TileMapLayer = room.get_node("FloorLayer")
-	var floor_cells = floor_layer.get_used_cells()
+	var floor_cells: Array = floor_layer.get_used_cells()
 	if floor_cells.is_empty():
 		return
 
 	var skeleton_count = randi_range(2, 4)
-	for i in skeleton_count:
+	for i in range(skeleton_count):
 		var skeleton = skeleton1_scene.instantiate()
 		add_child(skeleton)
 
@@ -131,12 +172,12 @@ func spawn_skeletons_in_room(room: Node2D):
 		skeleton.global_position = floor_layer.to_global(spawn_pos)
 
 
-func _spawn_door_in_room(room: Node2D):
-	if not room.has_node("FloorLayer"):
+func _spawn_door_in_room(room: Node2D) -> void:
+	if not room or not room.has_node("FloorLayer"):
 		return
 	
 	var floor_layer: TileMapLayer = room.get_node("FloorLayer")
-	var floor_cells = floor_layer.get_used_cells()
+	var floor_cells: Array = floor_layer.get_used_cells()
 	if floor_cells.is_empty():
 		return
 
@@ -211,29 +252,37 @@ func _spawn_door_in_room(room: Node2D):
 		sprite.play("close")
 
 
-func spawn_player():
+func spawn_player() -> Node2D:
 	var player = player_scene.instantiate()
 	add_child(player)
+	player.add_to_group("player")
 
 	var existing_rooms = rooms.get_children()
 	if existing_rooms.is_empty():
-		return
+		return player
 
 	var first_room = existing_rooms[0]
+	if not first_room.has_node("FloorLayer"):
+		player.global_position = first_room.global_position
+		return player
+
 	var floor_layer: TileMapLayer = first_room.get_node("FloorLayer")
-	var floor_cells = floor_layer.get_used_cells()
+	var floor_cells: Array = floor_layer.get_used_cells()
 
 	if floor_cells.is_empty():
 		player.global_position = first_room.global_position
-		return
+		return player
 
-	var center_index = floor_cells.size() / 2
+	var center_index = int(floor_cells.size() / 2)
 	var center_cell = floor_cells[center_index]
 	var spawn_position = floor_layer.map_to_local(center_cell)
 	player.global_position = floor_layer.to_global(spawn_position)
 
+	return player
 
-func spawn_slime1():
+
+
+func spawn_slime1() -> void:
 	var existingRooms = rooms.get_children()
 	if existingRooms.is_empty():
 		return
@@ -245,12 +294,12 @@ func spawn_slime1():
 			continue
 		
 		var floor_layer: TileMapLayer = room.get_node("FloorLayer")
-		var floor_cells = floor_layer.get_used_cells()
+		var floor_cells: Array = floor_layer.get_used_cells()
 		if floor_cells.is_empty():
 			continue
 
 		var slime_count = randi_range(1, 3)
-		for j in slime_count:
+		for j in range(slime_count):
 			var slime = slime1_scene.instantiate()
 			add_child(slime)
 

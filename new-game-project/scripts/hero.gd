@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
 var speed = 80
-var health: int = 3
+var max_health: int = 3
+var health: int = max_health
 var dead: bool = false
 var hearts_list : Array[TextureRect]
 
@@ -15,11 +16,15 @@ var ammo: int = MAG_SIZE
 @onready var arrow = preload("res://scenes/arrow.tscn")
 @onready var anim = $AnimatedSprite2D
 @onready var marker = $Marker2D
+@onready var game_over_ui = $CanvasLayer/game_over
+
 
 func _ready() -> void:
+	game_over_ui.visible = false
 	var hearts_parent = $health_bar/HBoxContainer
 	for child in hearts_parent.get_children():
 		hearts_list.append(child)
+		
 
 func _physics_process(delta):
 	if dead:
@@ -141,3 +146,8 @@ func death():
 	dead = true
 	velocity = Vector2.ZERO
 	anim.play("death")
+	$CollisionShape2D.queue_free()
+	game_over_ui.visible = true
+
+	# Xoá save khi thua
+	Global.delete_save()

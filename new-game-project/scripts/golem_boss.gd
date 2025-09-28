@@ -4,7 +4,6 @@ extends CharacterBody2D
 @onready var sprite = $Sprite2D
 @onready var progress_bar = $UI/ProgressBar
 @onready var idle = $FiniteStateMachine/Idle
-
 var direction : Vector2
 var DEF = 0
 
@@ -26,7 +25,6 @@ var health = 100:
 
 func _ready():
 	set_physics_process(false)
-
 func _process(_delta):
 	direction = player.position - position
 	
@@ -41,6 +39,16 @@ func _physics_process(delta):
 
 func take_damage():
 		health -= 4 - DEF
+		flash_white()
+
+func flash_white():
+	var original_color = sprite.modulate
+	sprite.modulate = Color(2, 2, 2, 1) # sáng gấp đôi
+	await get_tree().create_timer(0.1).timeout
+	if sprite:
+		sprite.modulate = original_color
+
+
 
 func _on_area_2d_body_entered(body):
 	if body.is_in_group("player") and body.has_method("take_damage"):

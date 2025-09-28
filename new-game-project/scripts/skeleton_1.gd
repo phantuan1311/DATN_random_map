@@ -194,7 +194,6 @@ func death():
 	$detect_area/CollisionShape2D.set_deferred("disabled", true)
 	$attack_area/CollisionShape2D.set_deferred("disabled", true)
 
-	# spawn coin ngẫu nhiên từ 0 đến 3
 	var rng = randi_range(0, 4)
 	for i in rng:
 		var coin = coin_scene.instantiate()

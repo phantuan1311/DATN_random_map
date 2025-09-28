@@ -25,3 +25,8 @@ func _ready():
 		rect = rect.expand(cell)
 	var center_cell: Vector2i = rect.get_center()
 	boss.position = floor_layer.map_to_local(center_cell)
+
+func get_save_data(player: Node2D) -> Dictionary:
+	return {
+		"player_position": player.global_position,
+	}

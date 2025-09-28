@@ -1,50 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtfwjrfnfvwfb"]
+[gd_scene load_steps=3 format=3 uid="uid://dtfwjrfnfvwfb"]
 
 [ext_resource type="Script" path="res://scripts/pause_menu.gd" id="1_pbd2a"]
-[ext_resource type="Shader" path="res://shader/pause_menu.gdshader" id="2_7vhnh"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sb2h5"]
-shader = ExtResource("2_7vhnh")
-shader_parameter/lod = 0.0
-
-[sub_resource type="Animation" id="Animation_47fgn"]
-resource_name = "RESET"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_21wut"]
-resource_name = "blur"
-length = 0.3
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 0.8]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_2l0tn"]
-_data = {
-"RESET": SubResource("Animation_47fgn"),
-"blur": SubResource("Animation_21wut")
-}
+[ext_resource type="FontFile" uid="uid://dwqjiq5mjsbch" path="res://font/SVN-Retron 2000.otf" id="2_lcvwt"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -62,37 +19,39 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 0.117647)
+color = Color(0.481789, 0.481789, 0.481789, 0.117647)
 
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_sb2h5")
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -76.0
+offset_right = 140.0
+offset_bottom = 76.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 432.0
-offset_top = 312.0
-offset_right = 712.0
-offset_bottom = 464.0
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_lcvwt")
+theme_override_font_sizes/font_size = 40
+text = "Tạm dừng"
+horizontal_alignment = 1
 
 [node name="continue" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_lcvwt")
 text = "Tiếp tục"
 
 [node name="back_to_menu" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_lcvwt")
 text = "Thoát ra màn hình chính"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_2l0tn")
-}
 
 [connection signal="pressed" from="VBoxContainer/continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="VBoxContainer/back_to_menu" to="." method="_on_back_to_menu_pressed"]

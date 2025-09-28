@@ -20,3 +20,8 @@ func get_damage() -> int:
 func _on_body_entered(body):
 	if body.is_in_group("boss"):
 		body.take_damage()
+		queue_free()
+	elif body.is_in_group("monster"):
+		queue_free()
+	elif body.is_in_group("wall"):
+		queue_free()

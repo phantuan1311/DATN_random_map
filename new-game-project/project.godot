@@ -29,6 +29,7 @@ player=""
 arrow=""
 monster=""
 Dungeon=""
+wall=""
 
 [input]
 
