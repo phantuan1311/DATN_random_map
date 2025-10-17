@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var minRoomCount: int = 3
-@export var maxRoomCount: int = 5
+@export var minRoomCount: int = 8
+@export var maxRoomCount: int = 10
 
 @onready var rooms: Node2D = $rooms
 @onready var player_scene = preload("res://scenes/hero.tscn")
@@ -104,7 +104,6 @@ func _create_dungeon_with_min_loading(min_time: float = 3.0) -> void:
 	$CanvasLayer/loading.visible = true
 	var timer = get_tree().create_timer(min_time).timeout
 	await _create_dungeon()
-	await timer
 	$CanvasLayer/loading.visible = false
 
 # -------------------- DUNGEON GENERATION --------------------
@@ -140,7 +139,7 @@ func _create_room() -> void:
 		return
 	
 	var success: bool = false
-	var tries: int = 8
+	var tries: int = 10
 	while tries > 0 and not success:
 		var selectedRoom = possibleRooms.pick_random()
 		# đảm bảo valid trước khi connect
@@ -308,10 +307,6 @@ func spawn_bat1() -> void:
 
 			var random_cell = floor_cells.pick_random()
 			var spawn_position = floor_layer.map_to_local(random_cell)
-
-			# Dơi bay nên spawn cao hơn mặt đất 40px
-			spawn_position.y -= 0
-
 			bat.global_position = floor_layer.to_global(spawn_position)
 
 

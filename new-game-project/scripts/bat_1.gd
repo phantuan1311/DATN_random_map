@@ -24,6 +24,11 @@ var direction: int = 1
 var knockback_velocity: Vector2 = Vector2.ZERO
 
 @onready var hp_potion = preload("res://scenes/hp_potion.tscn")
+var start_pos: Vector2
+var patrol_points: Array[Vector2] = []
+var patrol_index: int = 0
+var waiting: bool = false
+
 
 var player: Node = null
 var start_x: float
@@ -39,6 +44,17 @@ func _ready():
 
 	dead = false
 	start_x = position.x
+	start_pos = global_position
+
+	# Tạo 4 điểm hình vuông (40px)
+	var size = 40
+	patrol_points = [
+		start_pos + Vector2(size, 0),   # phải
+		start_pos + Vector2(size, size), # xuống
+		start_pos + Vector2(0, size),   # trái
+		start_pos                       # lên (về gốc)
+	]
+
 
 
 func _physics_process(delta):
@@ -93,14 +109,27 @@ func _chase_player(delta):
 
 
 func _patrol(delta):
-	velocity.x = direction * speed
+	if waiting:
+		velocity = Vector2.ZERO
+		return
+
+	var target = patrol_points[patrol_index]
+	var dir = (target - global_position).normalized()
+	velocity = dir * speed
 	move_and_slide()
-	
-	if abs(position.x - start_x) > patrol_range or is_on_wall():
-		direction *= -1
-	
+
+	# Đến gần điểm patrol thì dừng 1s rồi đổi hướng
+	if global_position.distance_to(target) < 2:
+		waiting = true
+		await get_tree().create_timer(1.0).timeout
+		waiting = false
+		patrol_index = (patrol_index + 1) % patrol_points.size()
+
+	# Cập nhật hướng sprite
 	if sprite and not stunned:
-		sprite.flip_h = direction < 0
+		if abs(dir.x) > abs(dir.y):
+			sprite.flip_h = dir.x < 0
+
 
 
 func _aim():

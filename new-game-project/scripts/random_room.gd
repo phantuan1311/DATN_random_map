@@ -2,8 +2,8 @@
 
 @export var minFloorWidth = 6
 @export var minFloorHeight = 6
-@export var maxFloorWidth = 15
-@export var maxFloorHeight = 15
+@export var maxFloorWidth = 12
+@export var maxFloorHeight = 12
 @export var maxOverlapFloors = 5
 @export var fillGapSize = 4
 
@@ -62,9 +62,10 @@ func _ready() -> void:
 func _create_room():
 	var floorCount = randi_range(1, maxOverlapFloors)
 	var floors = []
-	
-	for floor in floorCount:
+
+	for _i in range(floorCount):
 		floors.append(_create_floor_rect())
+
 		
 	_draw_floor(floors)
 	_fill_gaps()
@@ -254,14 +255,6 @@ func _create_top_wall(position):
 	wall_layer.set_cell(position + directions["top"], 0, top_tile)
 	wall_layer.set_cell(position + directions["top"] * 2, 0, top2_tile)
 	wall_layer.set_cell(position + directions["top"] * 3, 0, top3_tile)
-
-	# ✅ 10% cơ hội tạo torch, nhưng không nếu gần door
-	if randf() < 0.1:
-		var torch_pos = wall_layer.map_to_local(position + directions["top"])
-		if not _is_near_door(torch_pos):
-			var torch_instance = wall_tourch.instantiate()
-			add_child(torch_instance)
-			torch_instance.global_position = torch_pos + Vector2(0, -8)
 
 	if _has_floor(position + directions["top"] + directions["left"]):
 		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["topRightCornerReverse"])

@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://djq5vs7yg3drl"]
+[gd_scene load_steps=9 format=3 uid="uid://djq5vs7yg3drl"]
 
+[ext_resource type="Script" path="res://scripts/wall_tourch.gd" id="1_afh2e"]
 [ext_resource type="Texture2D" uid="uid://ch1y1qcei1h15" path="res://assets/Wall Torch/Wall torch-Sheet.png" id="1_u6owg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q8nic"]
@@ -42,6 +43,7 @@ animations = [{
 size = Vector2(14, 22)
 
 [node name="wall_tourch" type="Area2D"]
+script = ExtResource("1_afh2e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_py2gj")

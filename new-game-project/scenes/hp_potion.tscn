@@ -69,7 +69,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rbjde")
 }],
-"loop": true,
+"loop": false,
 "name": &"claim",
 "speed": 6.0
 }, {
@@ -92,7 +92,7 @@ shape = SubResource("RectangleShape2D_bgvpm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_07qdi")
+animation = &"claim"
 autoplay = "default"
-frame_progress = 0.170209
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -35,6 +35,7 @@ menu=""
 dungeon_bg=""
 door=""
 boss=""
+floor=""
 
 [input]
 
