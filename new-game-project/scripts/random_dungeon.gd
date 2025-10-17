@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var minRoomCount: int = 8
-@export var maxRoomCount: int = 10
+@export var minRoomCount: int = 3
+@export var maxRoomCount: int = 5
 
 @onready var rooms: Node2D = $rooms
 @onready var player_scene = preload("res://scenes/hero.tscn")

@@ -8,8 +8,16 @@ func _ready() -> void:
 
 
 func _on_new_game_pressed() -> void:
-	Global.load_requested = false   # tạo dungeon mới
+	# Reset dữ liệu toàn cục
+	Global.coins = 0
+	Global.load_requested = false
+	Global.has_save = false
+
+	# Chuyển sang dungeon mới
 	get_tree().change_scene_to_file("res://scenes/random_dungeon.tscn")
+	print("🎮 New Game started — coins reset to 0")
+
+
 
 func _on_quit_game_pressed() -> void:
 	get_tree().quit()

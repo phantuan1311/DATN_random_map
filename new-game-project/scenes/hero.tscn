@@ -1,9 +1,11 @@
-[gd_scene load_steps=30 format=3 uid="uid://b5clxft5ov06h"]
+[gd_scene load_steps=32 format=3 uid="uid://b5clxft5ov06h"]
 
 [ext_resource type="Texture2D" uid="uid://dj5qiya0ycl0h" path="res://assets/characters/players blue x1.png" id="1_ic5ig"]
 [ext_resource type="Script" path="res://scripts/hero.gd" id="1_mfmgu"]
 [ext_resource type="Texture2D" uid="uid://dt4hwjmra4frt" path="res://assets/art/Heart.png" id="3_hnevq"]
 [ext_resource type="PackedScene" uid="uid://ts6weheo5qxy" path="res://scenes/game_over.tscn" id="4_boiw4"]
+[ext_resource type="Texture2D" uid="uid://baiuxldvj0khx" path="res://assets/art/Coin Sheet.png" id="4_ettly"]
+[ext_resource type="FontFile" uid="uid://dwqjiq5mjsbch" path="res://font/SVN-Retron 2000.otf" id="5_nmglo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ons1g"]
 atlas = ExtResource("1_ic5ig")
@@ -252,6 +254,27 @@ layout_mode = 2
 position = Vector2(19, 18)
 scale = Vector2(1.8, 1.8)
 texture = ExtResource("3_hnevq")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="health_bar"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Sprite2D" type="Sprite2D" parent="health_bar/HBoxContainer2"]
+position = Vector2(33, 70)
+scale = Vector2(2, 2)
+texture = ExtResource("4_ettly")
+hframes = 8
+vframes = 2
+frame = 8
+
+[node name="Label" type="Label" parent="health_bar/HBoxContainer2/Sprite2D"]
+offset_left = 7.5
+offset_top = -13.5
+offset_right = 47.5
+offset_bottom = 13.5
+theme_override_fonts/font = ExtResource("5_nmglo")
+theme_override_font_sizes/font_size = 10
+text = "0"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

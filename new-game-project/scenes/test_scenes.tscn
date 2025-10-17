@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://desbg10o5kq0e"]
+[gd_scene load_steps=4 format=3 uid="uid://desbg10o5kq0e"]
 
 [ext_resource type="PackedScene" uid="uid://b5clxft5ov06h" path="res://scenes/hero.tscn" id="1_u3e1a"]
 [ext_resource type="PackedScene" uid="uid://djgh3q7osxyhh" path="res://scenes/bat_1.tscn" id="2_eg0v1"]
+[ext_resource type="PackedScene" uid="uid://chs1le1wd7kpq" path="res://scenes/hp_potion.tscn" id="3_o0p4e"]
 
 [node name="test_scenes" type="Node2D"]
 
 [node name="hero" parent="." instance=ExtResource("1_u3e1a")]
 
 [node name="Bat1" parent="." instance=ExtResource("2_eg0v1")]
+
+[node name="hp_potion" parent="." instance=ExtResource("3_o0p4e")]
+position = Vector2(14, 2)

@@ -17,8 +17,7 @@ var ammo: int = MAG_SIZE
 @onready var anim = $AnimatedSprite2D
 @onready var marker = $Marker2D
 @onready var game_over_ui = $CanvasLayer/game_over
-
-
+@onready var label_coin = $health_bar/HBoxContainer2/Sprite2D/Label
 func _ready() -> void:
 	game_over_ui.visible = false
 	var hearts_parent = $health_bar/HBoxContainer
@@ -27,6 +26,7 @@ func _ready() -> void:
 		
 
 func _physics_process(delta):
+	label_coin.text = str(Global.coins)
 	if dead:
 		velocity = Vector2.ZERO
 		move_and_slide()

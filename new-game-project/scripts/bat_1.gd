@@ -23,7 +23,7 @@ var stun_timer: float = 0.0
 var direction: int = 1
 var knockback_velocity: Vector2 = Vector2.ZERO
 
-@onready var coin_scene = preload("res://scenes/coin.tscn")
+@onready var hp_potion = preload("res://scenes/hp_potion.tscn")
 
 var player: Node = null
 var start_x: float
@@ -201,7 +201,7 @@ func death():
 	velocity = Vector2(0, 10)  # tốc độ rơi ban đầu
 	var gravity = 20.0
 	var fall_time = 0.0
-	var max_fall_time = 0.5  # tối đa 1 giây rồi xoá
+	var max_fall_time = 0.5
 
 	while fall_time < max_fall_time:
 		velocity.y += gravity * get_physics_process_delta_time()
@@ -209,10 +209,16 @@ func death():
 		fall_time += get_physics_process_delta_time()
 		await get_tree().process_frame
 
-	# Tùy chọn: tan biến dần trước khi xoá
+	# Tan biến dần
 	if sprite:
 		for i in range(10):
 			sprite.modulate.a = lerp(1.0, 0.0, i / 10.0)
 			await get_tree().create_timer(0.05).timeout
+
+	# 🎲 Xác suất rơi potion 10%
+	if randi() % 100 < 10:
+		var potion_instance = hp_potion.instantiate()
+		potion_instance.global_position = global_position
+		get_tree().current_scene.add_child(potion_instance)
 
 	queue_free()
