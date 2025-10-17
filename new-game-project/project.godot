@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://global.gd"
+AudioController="*res://scenes/audio_controller.tscn"
 
 [display]
 
@@ -30,6 +31,10 @@ arrow=""
 monster=""
 Dungeon=""
 wall=""
+menu=""
+dungeon_bg=""
+door=""
+boss=""
 
 [input]
 

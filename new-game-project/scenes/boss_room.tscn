@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b5clxft5ov06h" path="res://scenes/hero.tscn" id="2_lach4"]
 [ext_resource type="PackedScene" uid="uid://dtfwjrfnfvwfb" path="res://scenes/pause_menu.tscn" id="4_ssy4p"]
 
-[node name="BossRoom" type="Node2D" groups=["Dungeon"]]
+[node name="BossRoom" type="Node2D" groups=["Dungeon", "boss_bg"]]
 script = ExtResource("1_7xosx")
 
 [node name="RandomRoom" parent="." instance=ExtResource("1_so0ka")]

@@ -17,7 +17,7 @@
 @onready var floor_layer: TileMapLayer = $FloorLayer
 @onready var wall_layer: TileMapLayer = $WallLayer
 @onready var collision_polygon_2d: CollisionPolygon2D = $CollisionPolygon2D
-
+@onready var wall_tourch = preload("res://scenes/wall_tourch.tscn")
 var directions = {
 	"right": Vector2i(1,0),
 	"bottom": Vector2i(0,1),
@@ -254,13 +254,34 @@ func _create_top_wall(position):
 	wall_layer.set_cell(position + directions["top"], 0, top_tile)
 	wall_layer.set_cell(position + directions["top"] * 2, 0, top2_tile)
 	wall_layer.set_cell(position + directions["top"] * 3, 0, top3_tile)
-	
+
+	# ✅ 10% cơ hội tạo torch, nhưng không nếu gần door
+	if randf() < 0.1:
+		var torch_pos = wall_layer.map_to_local(position + directions["top"])
+		if not _is_near_door(torch_pos):
+			var torch_instance = wall_tourch.instantiate()
+			add_child(torch_instance)
+			torch_instance.global_position = torch_pos + Vector2(0, -8)
+
 	if _has_floor(position + directions["top"] + directions["left"]):
 		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["topRightCornerReverse"])
 	elif _has_floor(position + directions["top"] + directions["right"]):
 		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["topLeftCornerReverse"])
 	else:
 		wall_layer.set_cell(position + directions["top"] * 4, 0, wallTiles["top4"])
+
+
+# =========================================================
+# ⚙️ Hàm kiểm tra xem có gần cửa không
+# =========================================================
+func _is_near_door(world_pos: Vector2) -> bool:
+	for door in get_tree().get_nodes_in_group("door"):
+		if door is Area2D:
+			var distance = door.global_position.distance_to(world_pos)
+			if distance < 32:  # bán kính 32px (tuỳ scale map)
+				return true
+	return false
+
 
 
 

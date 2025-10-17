@@ -99,7 +99,9 @@ func load_game() -> bool:
 	# ✅ Chuyển tới đúng scene cũ
 	if get_tree().current_scene.scene_file_path != scene_path:
 		get_tree().change_scene_to_file(scene_path)
-		await get_tree().process_frame
+		# Chờ vài frame cho scene load hoàn toàn
+		for i in range(5):
+			await get_tree().process_frame
 
 	# ✅ Load dungeon nếu có
 	var d: Node = get_tree().get_first_node_in_group("Dungeon")
@@ -129,6 +131,7 @@ func load_game() -> bool:
 
 	print("✅ Game loaded thành công từ", scene_path, "| Coins:", coins)
 	return true
+
 
 
 # =========================================================

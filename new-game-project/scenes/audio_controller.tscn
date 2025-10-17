@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://c74tnsw2re4dd"]
+
+[ext_resource type="AudioStream" uid="uid://duki1sq50604h" path="res://music/BG_8-BIT Exploration Track - Pixel Peaks Passage.wav" id="1_2xwd8"]
+[ext_resource type="Script" path="res://scripts/audio_controller.gd" id="1_7kl0e"]
+[ext_resource type="AudioStream" uid="uid://dfy80bkp3w1pf" path="res://music/Soul Knight OST - Forest Theme (perfect loop).mp3" id="3_s85h3"]
+[ext_resource type="AudioStream" uid="uid://dfqfe8cobn6ho" path="res://music/Soul Knight OST - Grave Boss theme (perfect loop).mp3" id="4_jje1w"]
+
+[node name="AudioController" type="Node2D"]
+script = ExtResource("1_7kl0e")
+
+[node name="main" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_2xwd8")
+volume_db = -20.304
+pitch_scale = 1.15
+
+[node name="dungeon" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_s85h3")
+volume_db = -16.163
+pitch_scale = 1.1
+
+[node name="boss" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_jje1w")
+volume_db = -17.802
+pitch_scale = 1.1

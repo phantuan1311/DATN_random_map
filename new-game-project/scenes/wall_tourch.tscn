@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://djq5vs7yg3drl"]
+
+[ext_resource type="Texture2D" uid="uid://ch1y1qcei1h15" path="res://assets/Wall Torch/Wall torch-Sheet.png" id="1_u6owg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q8nic"]
+atlas = ExtResource("1_u6owg")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekic5"]
+atlas = ExtResource("1_u6owg")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2n27"]
+atlas = ExtResource("1_u6owg")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r3jae"]
+atlas = ExtResource("1_u6owg")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_py2gj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q8nic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekic5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q2n27")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r3jae")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ej743"]
+size = Vector2(14, 22)
+
+[node name="wall_tourch" type="Area2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_py2gj")
+autoplay = "default"
+frame_progress = 0.931961
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_ej743")

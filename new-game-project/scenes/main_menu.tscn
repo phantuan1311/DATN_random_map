@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_wcc7w"]
 [ext_resource type="FontFile" uid="uid://bton4hjgt1vth" path="res://font/SVN-Comic Sans.ttf" id="2_gl5a0"]
 
-[node name="Main menu" type="Node2D"]
+[node name="Main menu" type="Node2D" groups=["menu"]]
 script = ExtResource("1_wcc7w")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dfy80bkp3w1pf"
+path="res://.godot/imported/Soul Knight OST - Forest Theme (perfect loop).mp3-44f7f03a7e4954f571086aeb43865ddd.mp3str"
+
+[deps]
+
+source_file="res://music/Soul Knight OST - Forest Theme (perfect loop).mp3"
+dest_files=["res://.godot/imported/Soul Knight OST - Forest Theme (perfect loop).mp3-44f7f03a7e4954f571086aeb43865ddd.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
