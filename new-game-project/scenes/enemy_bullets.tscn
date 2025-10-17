@@ -1,0 +1,75 @@
+[gd_scene load_steps=11 format=3 uid="uid://cpw2gqnm0ljbq"]
+
+[ext_resource type="Texture2D" uid="uid://dkeih7l8pjmj0" path="res://assets/bonus enemies/sprAcidProjectile.png" id="1_0shrx"]
+[ext_resource type="Script" path="res://scripts/enemy_bullets.gd" id="1_uue62"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cws7v"]
+atlas = ExtResource("1_0shrx")
+region = Rect2(0, 0, 20, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjdxx"]
+atlas = ExtResource("1_0shrx")
+region = Rect2(20, 0, 20, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ueths"]
+atlas = ExtResource("1_0shrx")
+region = Rect2(40, 0, 20, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_40mp7"]
+atlas = ExtResource("1_0shrx")
+region = Rect2(60, 0, 20, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ahbe"]
+atlas = ExtResource("1_0shrx")
+region = Rect2(80, 0, 20, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0jeq"]
+atlas = ExtResource("1_0shrx")
+region = Rect2(100, 0, 20, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vu1n4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cws7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjdxx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ueths")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_40mp7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ahbe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c0jeq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kd7ku"]
+size = Vector2(13, 8)
+
+[node name="enemy_bullets" type="Area2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_uue62")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vu1n4")
+autoplay = "default"
+frame_progress = 0.363773
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, 0)
+shape = SubResource("RectangleShape2D_kd7ku")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]

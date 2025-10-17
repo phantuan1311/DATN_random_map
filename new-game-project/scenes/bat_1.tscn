@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://djgh3q7osxyhh"]
+
+[ext_resource type="Texture2D" uid="uid://cs5xnulcumv31" path="res://assets/bonus enemies/sprBatilisk1.png" id="1_ojiux"]
+[ext_resource type="Script" path="res://scripts/bat_1.gd" id="1_vbfvw"]
+[ext_resource type="PackedScene" uid="uid://cpw2gqnm0ljbq" path="res://scenes/enemy_bullets.tscn" id="2_742t0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1m1wf"]
+atlas = ExtResource("1_ojiux")
+region = Rect2(0, 0, 25, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2w60m"]
+atlas = ExtResource("1_ojiux")
+region = Rect2(25, 0, 25, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qk06k"]
+atlas = ExtResource("1_ojiux")
+region = Rect2(50, 0, 25, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mm6bl"]
+atlas = ExtResource("1_ojiux")
+region = Rect2(75, 0, 25, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a22gc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1m1wf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2w60m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qk06k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mm6bl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n66je"]
+radius = 4.0
+height = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4hr23"]
+radius = 5.09902
+
+[node name="Bat1" type="CharacterBody2D" groups=["monster"]]
+script = ExtResource("1_vbfvw")
+ammo = ExtResource("2_742t0")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_a22gc")
+autoplay = "default"
+frame_progress = 0.429627
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("CapsuleShape2D_n66je")
+
+[node name="hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_4hr23")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]

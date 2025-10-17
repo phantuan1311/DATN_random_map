@@ -8,6 +8,7 @@ extends Node2D
 @onready var slime1_scene = preload("res://scenes/slime_1.tscn")
 @onready var skeleton1_scene = preload("res://scenes/skeleton_1.tscn")
 @onready var door = preload("res://scenes/door.tscn")
+@onready var bat_scene = preload("res://scenes/bat_1.tscn")
 
 const RANDOM_ROOM = preload("res://scenes/random_room.tscn")
 
@@ -30,6 +31,8 @@ func _ready() -> void:
 		_spawn_door_in_room(last_valid_room)
 	spawn_player()
 	spawn_slime1()
+	spawn_bat1() 
+
 
 
 func _do_load_game() -> void:
@@ -44,6 +47,7 @@ func _do_load_game() -> void:
 			_spawn_door_in_room(last_valid_room)
 		spawn_player()
 		spawn_slime1()
+		spawn_bat1()
 	# nếu ok == true thì Global.load_game() sẽ tự gọi load_from_data()
 	# nên không cần tự tái tạo dungeon ở đây
 
@@ -92,6 +96,7 @@ func load_from_data(data: Dictionary) -> void:
 
 	# Spawn enemy
 	spawn_slime1()
+	spawn_bat1()
 	spawn_skeletons_in_room(last_valid_room)
 
 # Hàm helper: tạo dungeon + loading tối thiểu N giây
@@ -278,6 +283,36 @@ func spawn_player() -> Node2D:
 	player.global_position = floor_layer.to_global(spawn_position)
 
 	return player
+
+func spawn_bat1() -> void:
+	var existingRooms = rooms.get_children()
+	if existingRooms.is_empty():
+		return
+
+	# Bỏ qua phòng đầu tiên (để player không bị tấn công ngay khi spawn)
+	for i in range(1, existingRooms.size()):
+		var room = existingRooms[i]
+		if not room.has_node("FloorLayer"):
+			continue
+		
+		var floor_layer: TileMapLayer = room.get_node("FloorLayer")
+		var floor_cells: Array = floor_layer.get_used_cells()
+		if floor_cells.is_empty():
+			continue
+
+		# số lượng dơi trong mỗi phòng
+		var bat_count = randi_range(1, 2)
+		for j in range(bat_count):
+			var bat = bat_scene.instantiate()
+			add_child(bat)
+
+			var random_cell = floor_cells.pick_random()
+			var spawn_position = floor_layer.map_to_local(random_cell)
+
+			# Dơi bay nên spawn cao hơn mặt đất 40px
+			spawn_position.y -= 0
+
+			bat.global_position = floor_layer.to_global(spawn_position)
 
 
 

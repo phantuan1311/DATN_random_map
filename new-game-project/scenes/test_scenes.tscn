@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://desbg10o5kq0e"]
+
+[ext_resource type="PackedScene" uid="uid://b5clxft5ov06h" path="res://scenes/hero.tscn" id="1_u3e1a"]
+[ext_resource type="PackedScene" uid="uid://djgh3q7osxyhh" path="res://scenes/bat_1.tscn" id="2_eg0v1"]
+
+[node name="test_scenes" type="Node2D"]
+
+[node name="hero" parent="." instance=ExtResource("1_u3e1a")]
+
+[node name="Bat1" parent="." instance=ExtResource("2_eg0v1")]

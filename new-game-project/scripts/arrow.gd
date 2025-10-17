@@ -5,7 +5,7 @@ var speed = 220
 
 
 func _ready():
-	set_as_top_level(true) #hàm này để mũi tên luôn ở layer trên nhất/ không bị che bởi assets khác
+	set_as_top_level(true) #hàm này để đạn luôn ở layer trên nhất/ không bị che bởi assets khác
 
 func _process(delta):
 	position += (Vector2.RIGHT*speed).rotated(rotation) * delta
