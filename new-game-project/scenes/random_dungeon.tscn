@@ -230,12 +230,11 @@ script = ExtResource("1_55fmr")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="loading" type="AnimatedSprite2D" parent="CanvasLayer"]
-visible = false
-position = Vector2(575, 281)
+position = Vector2(575, 287)
 scale = Vector2(0.724167, 0.724167)
 sprite_frames = SubResource("SpriteFrames_3kc6w")
 autoplay = "default"
-frame_progress = 0.892838
+frame_progress = 0.356766
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("2_qxiuh")]
 visible = false

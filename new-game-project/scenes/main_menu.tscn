@@ -8,15 +8,23 @@
 script = ExtResource("1_wcc7w")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(542, 334)
-scale = Vector2(1.21858, 1.21858)
+position = Vector2(491, 435)
+scale = Vector2(0.929687, 0.929688)
 texture = ExtResource("1_ahcmw")
 
 [node name="Button_manager" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 48.0
+offset_top = 21.0
+offset_right = 88.0
+offset_bottom = 61.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="new_game" type="Button" parent="Button_manager"]
 layout_mode = 0

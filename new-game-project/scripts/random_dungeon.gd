@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var minRoomCount: int = 5
+@export var minRoomCount: int = 8
 @export var maxRoomCount: int = 10
 
 @onready var rooms: Node2D = $rooms
@@ -101,7 +101,6 @@ func _create_dungeon_with_min_loading(min_time: float = 3.0) -> void:
 	await _create_dungeon()
 	await timer
 	$CanvasLayer/loading.visible = false
-
 
 # -------------------- DUNGEON GENERATION --------------------
 
